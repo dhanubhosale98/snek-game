@@ -14,7 +14,7 @@ const firstDiv = document.getElementById('first');
 const lost = document.getElementById("lost");
 const scoreEle=document.getElementById('score');
 
-
+// create the random green element
 function createRandom() {
     r1 = Math.floor(Math.random() * 10);
 
@@ -27,6 +27,7 @@ function createRandom() {
         r2--;
 }
 
+// creates the table with 10 rows
 function starterTemplate() {
 
     for (let i = 0; i < 10; i++) {
@@ -48,26 +49,15 @@ function starterTemplate() {
     }
 }
 
+
 function switchfun() {
 
     try {
-        if (newArr[0][0] == -1 || newArr[0][0] == 10) {
-            clearInterval(interval);
-            lost.innerText = "you have lost ....play again."
-            score=newArr.length/3;
-            scoreEle.innerText=`Score: ${Math.floor(score)}`;
-            table.innerHTML = ""
+        if (newArr[0][0] == -1 || newArr[0][0] == 10 || newArr[0][1] == -1 || newArr[0][1] == 10) {
+            userDiesOnCollidOnWall();
         }
 
-        if (newArr[0][1] == -1 || newArr[0][1] == 10) {
-            clearInterval(interval);
-            lost.innerText = "you have lost ....play again."
-            score=newArr.length/3;
-            scoreEle.innerText=`Score: ${Math.floor(score)}`;
-            table.innerHTML = ""
-        }
-
-        checkCollid()
+        checkCollidOnEachOther()
 
         if (newArr[0][0] == r1 && newArr[0][1] == r2) {
             newArr.push([r1, r2]);
@@ -85,6 +75,7 @@ function switchfun() {
 
 }
 
+// move the array or snek to next step
 function switchPair() {
     try {
         for (let i = 0; i < newArr.length; i++) {
@@ -121,6 +112,18 @@ function switchPair() {
     }
 }
 
+// handle the code after the snek collid on wall
+function userDiesOnCollidOnWall(){
+    clearInterval(interval);
+    lost.innerText = "you have lost ....play again."
+    score=newArr.length/3;
+    scoreEle.innerText=`Score: ${Math.floor(score)}`;
+    table.innerHTML = ""
+}
+
+
+
+//all type of keyDown event or to set the current key
 document.addEventListener('keydown', function ($event) {
 
     if (currentKey == "ArrowDown" && event.key == "ArrowUp") {
@@ -140,22 +143,27 @@ document.addEventListener('keydown', function ($event) {
     }
 })
 
+// event listener for simple button
 simplebtn.addEventListener('click', () => {
     calledAfterNewGame(600)
 
 })
 
+// event listener for medium button
 mediumbtn.addEventListener('click', () => {
     calledAfterNewGame(400)
 
 })
 
+// event listener for hard button
 hardbtn.addEventListener('click', () => {
 
     calledAfterNewGame(200)
 
 })
 
+
+// when new game start the all value set again
 function calledAfterNewGame(time) {
     lost.innerText = "";
     scoreEle.innerText="";
@@ -166,7 +174,8 @@ function calledAfterNewGame(time) {
     interval = setInterval(() => { switchfun() }, time)
 }
 
-function checkCollid() {
+// check the snek collid on itself
+function checkCollidOnEachOther() {
     let ele = newArr[0];
 
     for (let i = 1; i < newArr.length; i++) {
